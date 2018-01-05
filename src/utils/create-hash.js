@@ -10,8 +10,6 @@ const createHash = itemCount => {
     hashDigits.unshift(remainder);
   }
 
-  console.log(hashDigits);
-
   // prettier-ignore
   const alphabetArray = `ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789`.split('');
 

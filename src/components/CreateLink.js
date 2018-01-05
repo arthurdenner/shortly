@@ -31,6 +31,7 @@ class CreateLink extends Component {
 
     const linkCountQuery = await client.query({
       query: GET_LINK_COUNT_QUERY,
+      fetchPolicy: 'network-only',
     });
 
     const linkCount = linkCountQuery.data.links.count;
