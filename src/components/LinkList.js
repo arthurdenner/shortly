@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import Link from './Link';
 import Message from './Message';
 
-import { graphql, compose } from 'react-apollo';
+import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 
 const ALL_LINKS_QUERY = gql`
-  query AllLinksQuery {
+  query {
     allLinks {
       id
       url
@@ -38,6 +38,4 @@ class LinkList extends Component {
   }
 }
 
-export default compose(graphql(ALL_LINKS_QUERY, { name: 'allLinksQuery' }))(
-  LinkList
-);
+export default graphql(ALL_LINKS_QUERY, { name: 'allLinksQuery' })(LinkList);
