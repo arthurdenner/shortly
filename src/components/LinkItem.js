@@ -1,18 +1,19 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
 class LinkItem extends Component {
   render() {
     const { link } = this.props;
+    const clickCount = (link.stats && link.stats.clicks) || 0;
 
     return (
       <div>
         <div>
-          {link.description}
-          <Link to={`/${link.hash}`} target="_blank">
+          {link.description}{' '}
+          <a href={link.hash} target="_blank">
             ({link.url} - {link.hash})
-          </Link>
+          </a>
+          {' -'} {clickCount} clicks
         </div>
       </div>
     );

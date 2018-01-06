@@ -1,18 +1,34 @@
 import React from 'react';
 import gql from 'graphql-tag';
-import { graphql } from 'react-apollo';
+import { compose, graphql } from 'react-apollo';
 import PropTypes from 'prop-types';
 import Message from './Message';
 
 const GET_FULL_LINK_QUERY = gql`
-  query GetFullLink($hash: String!) {
+  query($hash: String!) {
     allLinks(filter: { hash: $hash }) {
+      id
       url
+      stats {
+        clicks
+      }
     }
   }
 `;
 
-const LinkRedirect = ({ hash, data: { loading, error, allLinks } }) => {
+const UPDATE_CLICK_COUNT_MUTATION = gql`
+  mutation($id: ID!, $clicks: Int!) {
+    updateLink(id: $id, dummy: "dummy", stats: { clicks: $clicks }) {
+      id
+    }
+  }
+`;
+
+const LinkRedirect = ({
+  data: { loading, error, allLinks },
+  hash,
+  updateClickCount,
+}) => {
   if (loading) {
     return <Message text="Loading..." />;
   }
@@ -25,20 +41,33 @@ const LinkRedirect = ({ hash, data: { loading, error, allLinks } }) => {
     return <Message text={`No redirect found for '${hash}'`} />;
   }
 
-  // TODO: increase the click count here.
-  window.location = allLinks[0].url;
+  const linkInfo = allLinks[0];
+  let currentClicks = (linkInfo.stats && linkInfo.stats.clicks) || 0;
+
+  // Increment the click count
+  currentClicks++;
+
+  // Update the click count.
+  updateClickCount({
+    variables: {
+      id: linkInfo.id,
+      clicks: currentClicks,
+    },
+  });
+
+  // Navigate to the full URL
+  window.location = linkInfo.url;
 
   return null;
 };
 
 LinkRedirect.propTypes = {
-  hash: PropTypes.string,
+  hash: PropTypes.string.isRequired,
 };
 
-LinkRedirect.defaultProps = {
-  hash: null,
-};
-
-export default graphql(GET_FULL_LINK_QUERY, {
-  options: ({ hash }) => ({ variables: { hash } }),
-})(LinkRedirect);
+export default compose(
+  graphql(UPDATE_CLICK_COUNT_MUTATION, { name: 'updateClickCount' }),
+  graphql(GET_FULL_LINK_QUERY, {
+    options: ({ hash }) => ({ variables: { hash } }),
+  })
+)(LinkRedirect);

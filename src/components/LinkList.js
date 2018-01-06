@@ -12,6 +12,9 @@ const ALL_LINKS_QUERY = gql`
       url
       description
       hash
+      stats {
+        clicks
+      }
     }
   }
 `;
@@ -24,6 +27,9 @@ const NEW_LINKS_SUBSCRIPTION = gql`
         url
         description
         hash
+        stats {
+          clicks
+        }
       }
     }
   }
@@ -36,6 +42,12 @@ class LinkList extends Component {
     allLinksQuery.subscribeToMore({
       document: NEW_LINKS_SUBSCRIPTION,
       updateQuery: (prev, { subscriptionData }) => {
+        if (
+          prev.allLinks.find(l => l.id === subscriptionData.data.Link.node.id)
+        ) {
+          return prev;
+        }
+        
         const newLinks = [...prev.allLinks, subscriptionData.data.Link.node];
         const result = {
           ...prev,
