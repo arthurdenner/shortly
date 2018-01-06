@@ -1,21 +1,25 @@
 import React, { Component } from 'react';
+import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 
-class Link extends Component {
+class LinkItem extends Component {
   render() {
     const { link } = this.props;
 
     return (
       <div>
         <div>
-          {link.description} ({link.url} - {link.hash})
+          {link.description}
+          <Link to={`/${link.hash}`}>
+            ({link.url} - {link.hash})
+          </Link>
         </div>
       </div>
     );
   }
 }
 
-Link.propTypes = {
+LinkItem.propTypes = {
   link: PropTypes.shape({
     id: PropTypes.string,
     url: PropTypes.string,
@@ -24,4 +28,4 @@ Link.propTypes = {
   }),
 };
 
-export default Link;
+export default LinkItem;
