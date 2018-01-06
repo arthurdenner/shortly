@@ -10,7 +10,7 @@ class LinkItem extends Component {
       <div>
         <div>
           {link.description}
-          <Link to={`/${link.hash}`}>
+          <Link to={`/${link.hash}`} target="_blank">
             ({link.url} - {link.hash})
           </Link>
         </div>

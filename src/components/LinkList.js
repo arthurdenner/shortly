@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import Link from './Link';
+import LinkItem from './LinkItem';
 import Message from './Message';
 
 import { graphql } from 'react-apollo';
@@ -63,7 +63,7 @@ class LinkList extends Component {
     }
 
     return allLinksQuery.allLinks.map(link => (
-      <Link key={link.id} link={link} />
+      <LinkItem key={link.id} link={link} />
     ));
   }
 }
