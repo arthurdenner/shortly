@@ -24,6 +24,12 @@ types: ./types.graphql
 #       code: src/hello.js
 #     type: resolver
 #     schema: src/hello.graphql
+functions:
+  createLink:
+    type: subscription
+    query: src/createLink.graphql
+    handler:
+      code: src/createLink.js
 
 
 # Model/Relation permissions are used to limit the API access
