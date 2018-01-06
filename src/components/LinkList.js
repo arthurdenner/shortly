@@ -18,7 +18,7 @@ const ALL_LINKS_QUERY = gql`
 
 const NEW_LINKS_SUBSCRIPTION = gql`
   subscription {
-    Link(filter: { mutation_in: [CREATED] }) {
+    Link(filter: { mutation_in: [UPDATED] }) {
       node {
         id
         url
