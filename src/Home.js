@@ -14,8 +14,6 @@ const LOGGED_IN_USER_QUERY = gql`
 
 class Home extends Component {
   logout = () => {
-    const { history } = this.props;
-
     localStorage.removeItem('SHORTLY_ID');
     localStorage.removeItem('SHORTLY_TOKEN');
 

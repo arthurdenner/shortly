@@ -3,8 +3,12 @@ import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 
 const CREATE_LINK_MUTATION = gql`
-  mutation($description: String!, $url: String!) {
-    createLink(description: $description, url: $url) {
+  mutation($description: String!, $url: String!, $createdById: ID!) {
+    createLink(
+      description: $description
+      url: $url
+      createdById: $createdById
+    ) {
       id
     }
   }
@@ -24,6 +28,7 @@ class CreateLink extends Component {
       variables: {
         url,
         description,
+        createdById: localStorage.getItem('SHORTLY_ID'),
       },
     });
   };

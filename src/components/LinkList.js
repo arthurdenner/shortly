@@ -6,8 +6,8 @@ import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 
 const ALL_LINKS_QUERY = gql`
-  query {
-    allLinks {
+  query($createdById: ID!) {
+    allLinks(filter: { createdBy: { id: $createdById } }) {
       id
       url
       description
@@ -20,8 +20,13 @@ const ALL_LINKS_QUERY = gql`
 `;
 
 const NEW_LINKS_SUBSCRIPTION = gql`
-  subscription {
-    Link(filter: { mutation_in: [UPDATED] }) {
+  subscription($createdById: ID!) {
+    Link(
+      filter: {
+        mutation_in: [UPDATED]
+        node: { createdBy: { id: $createdById } }
+      }
+    ) {
       node {
         id
         url
@@ -41,13 +46,14 @@ class LinkList extends Component {
 
     allLinksQuery.subscribeToMore({
       document: NEW_LINKS_SUBSCRIPTION,
+      variables: { createdById: localStorage.getItem('SHORTLY_ID') },
       updateQuery: (prev, { subscriptionData }) => {
         if (
           prev.allLinks.find(l => l.id === subscriptionData.data.Link.node.id)
         ) {
           return prev;
         }
-        
+
         const newLinks = [...prev.allLinks, subscriptionData.data.Link.node];
         const result = {
           ...prev,
@@ -80,4 +86,11 @@ class LinkList extends Component {
   }
 }
 
-export default graphql(ALL_LINKS_QUERY, { name: 'allLinksQuery' })(LinkList);
+export default graphql(ALL_LINKS_QUERY, {
+  name: 'allLinksQuery',
+  options: props => ({
+    variables: {
+      createdById: localStorage.getItem('SHORTLY_ID'),
+    },
+  }),
+})(LinkList);
