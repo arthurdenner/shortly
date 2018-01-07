@@ -32,6 +32,7 @@ class Signup extends Component {
       // Store the ID and token in local storage.
       localStorage.setItem('SHORTLY_ID', result.data.signupUser.id);
       localStorage.setItem('SHORTLY_TOKEN', result.data.signupUser.token);
+
       history.push('/');
     } catch (err) {
       console.log(err);
@@ -61,7 +62,7 @@ class Signup extends Component {
           onChange={e => this.setState({ password: e.target.value })}
         />
         <br />
-        <button onClick={() => this.signup()}>Signup</button>
+        <button onClick={this.signup}>Signup</button>
       </div>
     );
   }
