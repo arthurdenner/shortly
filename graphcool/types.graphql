@@ -2,18 +2,19 @@
 # based on which the GraphQL API is generated
 
 type Link @model {
-    id: ID! @isUnique
-    hash: String
-    url: String!
-    description: String
-    dummy: String
-    stats: LinkStats @relation(name: "LinkOnLinkStats")
+  id: ID! @isUnique
+  hash: String
+  url: String!
+  description: String
+  dummy: String
+  stats: LinkStats @relation(name: "LinkOnLinkStats")
+  createdBy: User @relation(name: "UserLinks")
 }
 
 type LinkStats @model {
-    id: ID! @isUnique
-    clicks: Int
-    link: Link @relation(name: "LinkOnLinkStats")
+  id: ID! @isUnique
+  clicks: Int
+  link: Link @relation(name: "LinkOnLinkStats")
 }
 
 type User @model {
@@ -22,5 +23,6 @@ type User @model {
   updatedAt: DateTime! # read-only (managed by Graphcool)
   email: String! @isUnique
   password: String!
+  links: [Link!]! @relation(name: "UserLinks")
 }
 
