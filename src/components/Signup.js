@@ -35,16 +35,17 @@ class Signup extends Component {
 
       history.push('/');
     } catch (err) {
-      console.log(err);
-      // TODO: Handle the error properly
+      this.setState({ error: err.message });
+      console.log(err.message);
     }
   };
 
   render() {
-    const { email, password } = this.props;
+    const { email, error, password } = this.state;
 
     return (
       <div>
+        {error && <div>{error}</div>}
         <h2>Join Shortly</h2>
         <input
           id="email"

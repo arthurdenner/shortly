@@ -18,11 +18,11 @@ class Login extends Component {
   };
 
   login = async () => {
-    const { history, signupUserMutation } = this.props;
+    const { authenticateUserMutation, history } = this.props;
     const { email, password } = this.state;
 
     try {
-      const result = await this.props.authenticateUserMutation({
+      const result = await authenticateUserMutation({
         variables: {
           email,
           password,
@@ -33,18 +33,19 @@ class Login extends Component {
       localStorage.setItem('SHORTLY_ID', result.data.authenticateUser.id);
       localStorage.setItem('SHORTLY_TOKEN', result.data.authenticateUser.token);
 
-      this.props.history.push('/');
+      history.push('/');
     } catch (err) {
+      this.setState({ error: err.message });
       console.log(err);
-      // TODO: Handle errors properly here.
     }
   };
 
   render() {
-    const { email, password } = this.state;
+    const { email, error, password } = this.state;
 
     return (
       <div>
+        {error && <div>{error}</div>}
         <h2>Login to Shortly</h2>
         <input
           id="email"
