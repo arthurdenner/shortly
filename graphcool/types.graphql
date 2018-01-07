@@ -15,3 +15,12 @@ type LinkStats @model {
     clicks: Int
     link: Link @relation(name: "LinkOnLinkStats")
 }
+
+type User @model {
+  id: ID! @isUnique # read-only (managed by Graphcool)
+  createdAt: DateTime! # read-only (managed by Graphcool)
+  updatedAt: DateTime! # read-only (managed by Graphcool)
+  email: String! @isUnique
+  password: String!
+}
+
